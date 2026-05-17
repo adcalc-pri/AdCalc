@@ -1,0 +1,10 @@
+{
+  "name": "adcalc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ad Budget & Unit Economics Simulator — zero-server, offline-first DTC profit calculator",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

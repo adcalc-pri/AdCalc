@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdCalc — Free, Private Ad Profit & Unit-Economics Calculator</title>
+<meta name="description" content="Free ad profit simulator for DTC & dropshipping: unit economics, breakeven ROAS/CVR, CAC payback, LTV, scaling scenarios — computed live in your browser. No signup, no upload, no server.">
+<meta name="keywords" content="ad profit calculator, unit economics calculator, breakeven ROAS, CAC payback, DTC profit simulator, dropshipping calculator, MER calculator, free Triple Whale alternative">
+<meta name="author" content="Artivicolab">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://adcalc.artivicolab.com/">
+<meta name="theme-color" content="#1f6feb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<!-- Open Graph / Twitter -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AdCalc">
+<meta property="og:title" content="AdCalc — Free, Private Ad Profit Calculator">
+<meta property="og:description" content="See unit economics, breakeven, LTV and scaling scenarios live — entirely in your browser. Free, no signup, your numbers never leave your device.">
+<meta property="og:url" content="https://adcalc.artivicolab.com/">
+<meta property="og:image" content="https://adcalc.artivicolab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AdCalc — Free, Private Ad Profit Calculator">
+<meta name="twitter:description" content="Unit economics, breakeven, LTV and scaling scenarios — live, in your browser. Free, private, no signup.">
+<meta name="twitter:image" content="https://adcalc.artivicolab.com/og.png">
+<!-- Structured data: app, publisher, FAQ (rich results + AI answer engines) -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"SoftwareApplication","@id":"https://adcalc.artivicolab.com/#app","name":"AdCalc","url":"https://adcalc.artivicolab.com/","applicationCategory":"BusinessApplication","applicationSubCategory":"Marketing Analytics","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","description":"A free, offline-first ad profit and unit-economics simulator for DTC and dropshipping store owners and media buyers. Computes CPC, CAC/CPO, ROAS, breakeven ROAS and CVR, target ROAS, contribution margin, LTV, CAC payback, MER, marginal ROAS, the scaling ceiling and 6-tier scaling scenarios — entirely client-side. No data leaves the browser.","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["Live unit economics on every keystroke","Breakeven ROAS and breakeven CVR","Target ROAS / CPO from a profit goal","Customer LTV and CAC payback (cohort)","MER blended across channels","Marginal ROAS and scaling-ceiling / saturation point","6-tier scaling scenarios with CPM creep","Goal-seek solver","Sensitivity sliders","Shareable scenario links (no server)","Boardroom PDF export","100% local — no OAuth, no upload, no server"],"creator":{"@id":"https://artivicolab.com/#org"},"publisher":{"@id":"https://artivicolab.com/#org"}},
+{"@type":"Organization","@id":"https://artivicolab.com/#org","name":"Artivicolab","url":"https://artivicolab.com"},
+{"@type":"WebSite","@id":"https://adcalc.artivicolab.com/#website","url":"https://adcalc.artivicolab.com/","name":"AdCalc","publisher":{"@id":"https://artivicolab.com/#org"}},
+{"@type":"FAQPage","@id":"https://adcalc.artivicolab.com/#faq","mainEntity":[
+{"@type":"Question","name":"Is AdCalc free?","acceptedAnswer":{"@type":"Answer","text":"Yes. AdCalc is completely free with no signup, no accounts, no tiers and no paywall. Every feature is available to everyone."}},
+{"@type":"Question","name":"Does my data leave my browser?","acceptedAnswer":{"@type":"Answer","text":"No. AdCalc is a zero-server static tool. All computation happens locally in your browser and nothing is uploaded, transmitted or stored on any server. There is no OAuth and no ad-account connection."}},
+{"@type":"Question","name":"What does AdCalc calculate?","acceptedAnswer":{"@type":"Answer","text":"Unit economics for paid acquisition: CPC, orders, CAC/CPO, ROAS, breakeven ROAS and CVR, target ROAS and CPO, gross and net margin, contribution margin, breakeven AOV, customer LTV, CAC payback, MER, per-visitor metrics, marginal ROAS, the scaling ceiling, and 6-tier scaling scenarios with CPM creep."}},
+{"@type":"Question","name":"How is AdCalc different from Triple Whale or Northbeam?","acceptedAnswer":{"@type":"Answer","text":"Triple Whale and Northbeam are retrospective attribution platforms that require ad-account OAuth and store your data in their cloud. AdCalc is prospective: it forward-models profit from numbers you type, runs entirely in your browser, is free, and never connects to or uploads anything."}},
+{"@type":"Question","name":"Does AdCalc work offline?","acceptedAnswer":{"@type":"Answer","text":"Yes. After the page loads it runs fully offline — it is a static, client-side tool with no backend."}}]}
+]}
+</script>
+<link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem('adcalc_theme');if(t&&t!=='classic')document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a class="logo" href="home.html">AdCalc</a>
+    <span class="tag">Ad Budget &amp; Unit Economics Simulator</span>
+  </div>
+  <div class="topbar-right">
+    <label class="cur-select">
+      <span>Theme</span>
+      <select id="themeSelect"></select>
+    </label>
+    <a class="lp-nav-cta" href="index.html">Open the calculator</a>
+  </div>
+</header>
+
+<main class="lp">
+
+  <section class="hero">
+    <span class="pill">100% free · no signup · runs offline</span>
+    <h1>Your numbers <span class="accent">never leave</span> your browser.</h1>
+    <p>
+      AdCalc is an ad profit simulator for DTC and dropshipping store owners
+      and media buyers. Type your product and campaign numbers — see unit
+      economics, breakeven, and scaling scenarios compute live, entirely on
+      your machine.
+    </p>
+    <div class="hero-cta">
+      <a class="btn-lg primary" href="index.html">Start calculating</a>
+      <a class="btn-lg ghost" href="#how">See how it works</a>
+    </div>
+    <p class="hero-note">No account. No ad-platform OAuth. No data ever uploaded.</p>
+  </section>
+
+  <section class="section" id="how">
+    <h2>What you get</h2>
+    <p class="lead">
+      Everything is unlocked for everyone. No tiers, no paywall.
+    </p>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Live unit economics</h3>
+        <p>CPC, CAC, gross and net margin, ROAS, and daily/monthly profit
+          recompute on every keystroke. No submit button.</p>
+      </div>
+      <div class="feature">
+        <h3>Breakeven, instantly</h3>
+        <p>Breakeven ROAS and breakeven CVR surfaced as you type, with
+          red/amber/green health coloring so you see risk at a glance.</p>
+      </div>
+      <div class="feature">
+        <h3>6-tier scaling scenarios</h3>
+        <p>Model spend at 25% to 1000% of today with realistic CPM creep,
+          so you know what scaling actually does to profit.</p>
+      </div>
+      <div class="feature">
+        <h3>Sensitivity sliders</h3>
+        <p>Stress-test CTR, CVR, and CPM without retyping. Watch the whole
+          model move in real time.</p>
+      </div>
+      <div class="feature">
+        <h3>Save &amp; export</h3>
+        <p>Store products, campaigns, and scenarios locally in your browser.
+          Export any snapshot to CSV or JSON.</p>
+      </div>
+      <div class="feature">
+        <h3>Two input modes</h3>
+        <p>CPM + CTR for paid social, or enter CPC directly for paid search.
+          Multi-currency display included.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>The private alternative</h2>
+    <p class="lead">
+      Triple Whale and Northbeam are powerful — but they require ad-account
+      OAuth and store your numbers in their cloud. AdCalc doesn't.
+    </p>
+    <div class="compare">
+      <div class="compare-col">
+        <div class="name">Triple Whale</div>
+        <div class="price">$129<small>/mo</small></div>
+        <ul>
+          <li>Ad-account OAuth required</li>
+          <li>Data cloud-stored</li>
+          <li>Account &amp; onboarding</li>
+        </ul>
+      </div>
+      <div class="compare-col">
+        <div class="name">Northbeam</div>
+        <div class="price">$1,500+<small>/mo</small></div>
+        <ul>
+          <li>Starter from $1,500/mo; Pro &amp; Enterprise custom</li>
+          <li>Ad-account / Shopify integration required</li>
+          <li>Data cloud-stored · demo to start</li>
+        </ul>
+      </div>
+      <div class="compare-col us">
+        <div class="name">AdCalc</div>
+        <div class="price">Free</div>
+        <ul>
+          <li>No OAuth, no upload, no server</li>
+          <li>Data stays in your browser</li>
+          <li>Open it and start — runs offline</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Run the numbers now.</h2>
+    <p>It opens instantly and works without an internet connection.</p>
+    <a class="btn-lg primary" href="index.html">Open AdCalc</a>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <span>
+    AdCalc by <a href="https://artivicolab.com" target="_blank" rel="noopener">Artivicolab</a>
+    · Your numbers never leave your browser.
+    · Found an error or a missing feature?
+    <a id="contactMail" rel="nofollow">Contact us</a>
+    · Made with love.
+  </span>
+</footer>
+<script>(function(){var a=document.getElementById('contactMail');if(!a)return;var u='artivicolab',d='gmail.com';a.href='mailto:'+u+'@'+d+'?subject='+encodeURIComponent('AdCalc — error / feature report');})();</script>
+
+<script type="module" src="js/theme.js"></script>
+</body>
+</html>
