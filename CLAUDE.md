@@ -26,8 +26,10 @@ button**. Everything recalculates on `input` events.
 ## File map
 
 ```
-home.html          landing page; what AdCalc is, why local-first, link into the app
-index.html         single page; all four calculator screens
+index.html         landing page = SITE ROOT (what AdCalc is, links into the app)
+app.html           the calculator app — all screens (served at /app.html)
+privacy.html       privacy/data policy (consent withdrawal, GDPR)
+404.html           branded not-found page
 css/style.css      all styling (clean, paid-tool polish — "an ugly calculator won't sell")
 js/calc.js         PURE math engine. No DOM. Full float precision. Source of truth.
 js/scenarios.js    6 spend tiers + profitCurve() sampler (CPM-creep model)
@@ -121,7 +123,7 @@ changes per theme — cards, buttons, and the background share one structure
 across all four, so a new theme is just a token block plus an entry in
 `THEMES` in `js/theme.js`. Keep it that way: do not write theme-specific
 component rules. The choice persists in `localStorage['adcalc_theme']` and
-applies on both `home.html` and `index.html` (a tiny inline head script sets
+applies on both `index.html` (landing) and `app.html` (a tiny inline head script sets
 the attribute pre-paint to avoid a flash).
 
 ## No paywall
@@ -194,7 +196,7 @@ migration.)
   subtle `--shadow`) > `.btn`/`.btn-ghost` (soft outline) > `.btn-tertiary`
   (quiet text link). Landing uses `.btn-lg`/`.lp-nav-cta` — keep them visually
   consistent with this. All token-driven; no hardcoded button colors.
-- The site wordmark `.logo` IS the home link (`<a href="home.html">`) on every
+- The site wordmark `.logo` IS the home link (`<a href="index.html">`, the site root) on every
   page; there is no separate Home/About nav button. The info affordance glyph
   is `?` in the regular font (not `i`, not mono).
 - Tooltips (`?`) are reserved for genuine jargon only — never on

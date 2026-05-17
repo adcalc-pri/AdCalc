@@ -2,11 +2,28 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Consent Mode v2 — analytics denied until explicit opt-in (privacy-first) -->
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
+try{if(localStorage.getItem('adcalc_consent')==='granted'&&!(navigator.doNotTrack==='1'||window.doNotTrack==='1'||navigator.globalPrivacyControl===true))gtag('consent','update',{analytics_storage:'granted'});}catch(e){}
+gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);
+gtag('js',new Date());gtag('config','G-ETCBJWFTDX',{anonymize_ip:true});
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-ETCBJWFTDX"></script>
+<script defer src="js/consent.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy &amp; Data — AdCalc</title>
-<meta name="description" content="What AdCalc collects: nothing from your calculator. Optional anonymous analytics only after you explicitly opt in.">
-<meta name="robots" content="index,follow">
+<meta name="description" content="What AdCalc collects: nothing from your calculator. Optional anonymous analytics only after you explicitly opt in. Free, no accounts, no server.">
+<meta name="robots" content="index,follow,max-image-preview:large">
 <link rel="canonical" href="https://adcalc.artivicolab.com/privacy">
+<meta name="theme-color" content="#1f6feb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AdCalc">
+<meta property="og:title" content="Privacy &amp; Data — AdCalc">
+<meta property="og:description" content="Your calculator data never leaves your browser. Analytics is optional and opt-in only.">
+<meta property="og:url" content="https://adcalc.artivicolab.com/privacy">
 <link rel="stylesheet" href="css/style.css">
 <script>try{var t=localStorage.getItem('adcalc_theme');if(t&&t!=='classic')document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
@@ -14,87 +31,99 @@
 
 <header class="topbar">
   <div class="brand">
-    <a class="logo" href="home.html">AdCalc</a>
+    <a class="logo" href="index.html">AdCalc</a>
     <span class="tag">Privacy &amp; data</span>
+  </div>
+  <div class="topbar-right">
+    <label class="cur-select">
+      <span>Theme</span>
+      <select id="themeSelect"></select>
+    </label>
+    <a class="lp-nav-cta" href="app.html">Open the calculator</a>
   </div>
 </header>
 
-<main class="grid">
-  <section class="card" style="grid-column:1/-1;max-width:760px;margin:0 auto">
-    <div class="card-head"><h2>Privacy &amp; what we collect</h2></div>
+<main class="lp">
+  <article class="legal">
+    <h1>Privacy &amp; what we collect</h1>
+    <p class="legal-lead">Short version: your calculator data never leaves your
+    browser, AdCalc is free with no accounts, and analytics is optional and
+    opt-in only.</p>
 
-    <p><strong>Your calculator data never leaves your browser.</strong> Every
-    number you type — prices, costs, ad spend, campaigns, saved scenarios — is
-    computed locally in JavaScript and stored only on your own device in
-    <code>localStorage</code> and IndexedDB. It is never transmitted, uploaded,
-    or seen by us or any third party. There is no account, no login, and no
-    server that receives your inputs.</p>
+    <h2>Your calculator data never leaves your browser</h2>
+    <p>Every number you type — prices, costs, ad spend, campaigns, saved
+    scenarios — is computed locally in JavaScript and stored only on your own
+    device in <code>localStorage</code> and IndexedDB. It is never transmitted,
+    uploaded, or seen by us or any third party. There is no account, no login,
+    and no server that receives your inputs. Shareable scenario links encode
+    inputs in the URL fragment (<code>#…</code>), which browsers never send to
+    any server — including Google Analytics.</p>
 
-    <h3>Optional anonymous analytics</h3>
+    <h2>AdCalc is free</h2>
+    <p>There is no paywall, no subscription, no licence and no payment of any
+    kind. Every feature is available to everyone. We never ask for your
+    payment details because there is nothing to pay for.</p>
+
+    <h2>Optional anonymous analytics</h2>
     <p>We would like to know which pages are used so we can improve the tool.
-    For that we use Google Analytics 4, but only if you explicitly click
+    For that we use Google Analytics 4 — but only if you explicitly click
     <em>“Allow analytics”</em> in the consent banner. Specifically:</p>
     <ul>
-      <li>The Google tag (<code>gtag.js</code>) is <strong>not loaded at all</strong>
-      until you opt in. Before consent, nothing — not even a cookieless ping —
-      is sent to Google.</li>
+      <li>Analytics stays <strong>denied by default</strong> (Google Consent
+      Mode v2). Nothing is measured until you opt in.</li>
       <li>If you opt in, we collect only anonymous pageviews with IP
-      anonymization enabled. No personal data, no advertising or cross-site
-      tracking, and <strong>none of your calculator inputs</strong> are ever
-      sent (there are no custom analytics events anywhere in the app).</li>
-      <li>Ad storage, ad personalization, and ad user-data signals remain
-      <em>denied</em> at all times (Google Consent Mode v2).</li>
+      anonymization. No personal data, no advertising or cross-site tracking,
+      and <strong>none of your calculator inputs</strong> — there are no custom
+      analytics events anywhere in the app.</li>
+      <li>Ad storage, ad personalization and ad user-data signals remain
+      <em>denied</em> at all times, and ad-identifier redaction is on.</li>
       <li>If your browser sends a Do-Not-Track or Global Privacy Control
       signal, analytics stays off and the banner is suppressed.</li>
     </ul>
 
-    <h3>Your choice is recorded and reversible</h3>
-    <p>When you accept or decline, we store your choice, a timestamp, and the
-    policy version locally so we do not ask again unnecessarily. You can change
-    your mind at any time:</p>
-    <p><button id="withdrawBtn" class="btn btn-primary btn-sm">Reset my analytics choice</button>
-    <span id="withdrawMsg" class="muted"></span></p>
+    <h2>Your choice is recorded and reversible</h2>
+    <p>When you accept or decline, your choice is stored locally so we don’t
+    ask again unnecessarily. You can change your mind at any time:</p>
+    <p>
+      <button id="withdrawBtn" class="btn btn-primary btn-sm">Reset my analytics choice</button>
+      <span id="withdrawMsg" class="muted"></span>
+    </p>
     <p class="muted">This clears the stored choice and stops analytics on the
     next page load. You can also clear all locally stored data from your
     browser settings at any time.</p>
 
-    <h3>Subscription</h3>
-    <p>If you purchase AdCalc Pro, payment is handled by our payment processor
-    (Lemon Squeezy) under their own privacy policy. AdCalc only stores the
-    resulting licence token locally in your browser to unlock features.</p>
-
-    <h3>Your rights (EEA/UK GDPR)</h3>
+    <h2>Your rights (EEA / UK GDPR)</h2>
     <p>Because we do not collect or store personal data on any server, there is
     no personal dataset to access, rectify, or erase on our side — your data
     lives only on your device and is under your control. For the optional
     analytics or any question, the data controller is
     <strong>Artivicolab</strong>. Contact:
-    <a href="mailto:privacy@artivicolab.com">privacy@artivicolab.com</a>.</p>
+    <a id="privacyMail" rel="nofollow">email us</a>.</p>
 
-    <p class="muted">Last updated: 2026-05-16 · Policy version 1</p>
-    <p><a href="home.html">← Back to AdCalc</a></p>
-  </section>
+    <p class="muted legal-meta">Last updated 16 May 2026 · Policy version 1 ·
+    <a href="index.html">Back to AdCalc</a></p>
+  </article>
 </main>
 
 <footer class="foot">
-  <span>Your numbers never leave your browser. No OAuth. No upload. No server.</span>
+  <span>
+    AdCalc by <a href="https://artivicolab.com" target="_blank" rel="noopener">Artivicolab</a>
+    · Your numbers never leave your browser.
+    · Found an error or a missing feature?
+    <a id="contactMail" rel="nofollow">Contact us</a>
+    · Made with love.
+  </span>
 </footer>
-
-<script>
-(function () {
-  var btn = document.getElementById('withdrawBtn');
-  var msg = document.getElementById('withdrawMsg');
-  btn.addEventListener('click', function () {
-    try {
-      localStorage.removeItem('adcalc_consent');
-      localStorage.removeItem('adcalc_consent_at');
-      localStorage.removeItem('adcalc_consent_v');
-      msg.textContent = ' Cleared. Analytics will be off and you will be asked again on next visit.';
-    } catch (e) {
-      msg.textContent = ' Could not access storage in this browser.';
-    }
-  });
-})();
-</script>
+<script>(function(){var u='artivicolab',d='gmail.com',m=u+'@'+d;
+var c=document.getElementById('contactMail');
+if(c)c.href='mailto:'+m+'?subject='+encodeURIComponent('AdCalc — error / feature report');
+var p=document.getElementById('privacyMail');
+if(p){p.href='mailto:'+m+'?subject='+encodeURIComponent('AdCalc — privacy enquiry');p.textContent=m;}
+var btn=document.getElementById('withdrawBtn'),msg=document.getElementById('withdrawMsg');
+if(btn)btn.addEventListener('click',function(){try{localStorage.removeItem('adcalc_consent');
+localStorage.removeItem('adcalc_consent_at');localStorage.removeItem('adcalc_consent_v');
+msg.textContent=' Cleared — analytics is off and you’ll be asked again next visit.';}
+catch(e){msg.textContent=' Could not access storage in this browser.';}});})();</script>
+<script type="module" src="js/theme.js"></script>
 </body>
 </html>

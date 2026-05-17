@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Basic Consent Mode v2 — the Google tag itself is NOT loaded until the
+     visitor explicitly opts in (consent.js injects it on accept). Nothing is
+     sent to Google before consent, not even cookieless pings. EEA-safe. -->
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}window.gtag=gtag;
+gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
+gtag('set','ads_data_redaction',true);gtag('set','url_passthrough',true);
+gtag('js',new Date());gtag('config','G-ETCBJWFTDX',{anonymize_ip:true});
+</script>
+<script defer src="js/consent.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AdCalc — Ad Profit & Unit-Economics Calculator (Free, Private)</title>
+<meta name="description" content="Free, private ad profit calculator: type your product & campaign numbers and see unit economics, breakeven, LTV, CAC payback and scaling scenarios compute live — entirely in your browser.">
+<meta name="author" content="Artivicolab">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://adcalc.artivicolab.com/app.html">
+<meta name="theme-color" content="#1f6feb">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6feb'/%3E%3Ctext x='16' y='22' font-family='Arial,sans-serif' font-size='18' font-weight='700' fill='white' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AdCalc">
+<meta property="og:title" content="AdCalc — Free Ad Profit & Unit-Economics Calculator">
+<meta property="og:description" content="See unit economics, breakeven, LTV and scaling scenarios live — entirely in your browser. Free, private, no signup.">
+<meta property="og:url" content="https://adcalc.artivicolab.com/app.html">
+<meta property="og:image" content="https://adcalc.artivicolab.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AdCalc — Free Ad Profit Calculator">
+<meta name="twitter:description" content="Unit economics, breakeven, LTV, scaling — live, in your browser. Free & private.">
+<meta name="twitter:image" content="https://adcalc.artivicolab.com/og.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"AdCalc","url":"https://adcalc.artivicolab.com/app.html","applicationCategory":"BusinessApplication","operatingSystem":"Any (web browser)","browserRequirements":"Requires JavaScript","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Free, private, offline-first ad profit and unit-economics simulator for DTC and dropshipping. Computes CPC, CAC/CPO, ROAS, breakeven ROAS/CVR, target ROAS, contribution margin, LTV, CAC payback, MER, marginal ROAS, scaling ceiling and 6-tier scaling scenarios — entirely client-side.","publisher":{"@type":"Organization","name":"Artivicolab","url":"https://artivicolab.com"}}
+</script>
+<link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem('adcalc_theme');if(t&&t!=='classic')document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<div id="bgfx" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <a class="logo" href="index.html">AdCalc</a>
+    <span class="tag">Your ad math, in your browser</span>
+    <span class="trust" title="All computation is local. No OAuth, no upload, no server.">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10V8a6 6 0 0 1 12 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><rect x="4" y="10" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="15" r="1.6" fill="currentColor"/></svg>
+      NUMBERS&nbsp;STAY&nbsp;LOCAL
+    </span>
+  </div>
+  <div class="topbar-right">
+    <label class="cur-select">
+      <span>Theme</span>
+      <select id="themeSelect"></select>
+    </label>
+    <label class="cur-select">
+      <span>Currency</span>
+      <select id="currency">
+        <option value="$" selected>$ USD</option>
+        <option value="€">€ EUR</option>
+        <option value="£">£ GBP</option>
+        <option value="A$">A$ AUD</option>
+        <option value="C$">C$ CAD</option>
+        <option value="₹">₹ INR</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main class="grid">
+
+  <div id="alertBar" class="alertbar" role="alert" hidden></div>
+
+  <!-- SCREEN 1 — product inputs -->
+  <section class="card" id="productCard">
+    <div class="card-head">
+      <h2>Product</h2>
+      <div class="product-switch">
+        <select id="productSelect"><option value="">Current (unsaved)</option></select>
+        <button id="saveProductBtn" class="btn btn-primary btn-sm">Save product</button>
+      </div>
+    </div>
+    <div class="fields">
+      <label>Selling price
+        <span class="ip"><i class="cur">$</i><input id="price" type="number" step="0.01" value="49.00"></span>
+      </label>
+      <label>COGS (cost of goods)
+        <span class="ip"><i class="cur">$</i><input id="cogs" type="number" step="0.01" value="9.50"></span>
+      </label>
+      <label>Shipping cost
+        <span class="ip"><i class="cur">$</i><input id="shipping" type="number" step="0.01" value="5.00"></span>
+      </label>
+      <label>Payment processing <i class="info" tabindex="0" data-tip="What it is: payment-gateway fees as a percent of revenue (Shopify Payments, Stripe, PayPal, etc.). | Where to get it: typically ~2.9% + a fixed fee; check your processor's rate. | Why it matters: it scales with revenue and quietly takes a slice of every order. | RULE: enter it as a percent (2.9 means 2.9%). Roll the fixed per-transaction fee into Other fixed fees / order.">?</i>
+        <span class="ip"><input id="processing" type="number" step="0.1" value="2.9"><i class="suf">%</i></span>
+      </label>
+      <label>Returns / refund rate <i class="info" tabindex="0" data-tip="What it is: the share of orders refunded or returned, as a percent. | Where to get it: refunds ÷ orders over a recent period. | Why it matters: refunds destroy margin twice — lost revenue plus shipping/restocking — so the engine applies this against gross margin. | RULE: use your real trailing rate; apparel/beauty often run high. Enter 3 for 3%.">?</i>
+        <span class="ip"><input id="refund" type="number" step="0.1" value="3"><i class="suf">%</i></span>
+      </label>
+      <label>Other fixed fees / order <i class="info" tabindex="0" data-tip="What it is: flat per-order costs not captured elsewhere — pick/pack, packaging inserts, the fixed part of the payment fee, app/tech cost per order. | Where to get it: sum these monthly costs ÷ orders. | Why it matters: small per-order costs add up and are the most commonly forgotten margin leak. | RULE: a dollar amount per order, not a percent. Leave at 0 only if you are sure nothing fixed applies.">?</i>
+        <span class="ip"><i class="cur">$</i><input id="otherFees" type="number" step="0.01" value="1.20"></span>
+      </label>
+      <label>Target net profit (% of revenue) <i class="info" tabindex="0" data-tip="What it is: the net margin you WANT to keep after everything including ad cost, as a percent of revenue. | Why it matters: it drives Target ROAS and Target CPO — the numbers you actually optimise campaigns toward, not just breakeven. | RULE: set 0 and target metrics collapse to breakeven. Typical DTC targets sit around 10–20%; pick what the business needs, not a dream.">?</i>
+        <span class="ip"><input id="targetProfit" type="number" step="0.5" value="15"><i class="suf">%</i></span>
+      </label>
+      <label>Avg orders / customer / year (for LTV) <i class="info" tabindex="0" data-tip="What it is: how many times an average customer buys from you in a year. | Where to get it: total orders ÷ unique customers over 12 months. | Why it matters: it drives the simple LTV when no monthly repeat rate is set. One-and-done products sit near 1; consumables/subscriptions are higher. | RULE: if you set a Monthly repeat-purchase rate below, the more accurate cohort model takes over and this becomes a fallback.">?</i>
+        <span class="ip"><input id="ordersPerYear" type="number" step="0.1" value="1"></span>
+      </label>
+      <label>Monthly repeat-purchase rate (cohort LTV) <i class="info" tabindex="0" data-tip="What it is: the chance an existing customer places another order in a given month, as a percent. | Where to get it: of customers who bought, the share that buy again next month (a rough retention proxy). | Why it matters: this powers the honest 12-month cohort LTV and the real CAC-payback month, instead of a flat guess. | RULE: leave 0 if you genuinely have no repeat data — the tool falls back to the simple orders/year LTV. Even 10–20% changes the picture a lot.">?</i>
+        <span class="ip"><input id="retentionM" type="number" step="1" value="0"><i class="suf">%</i></span>
+      </label>
+    </div>
+  </section>
+
+  <!-- SCREEN 2 — ad inputs -->
+  <section class="card" id="adCard">
+    <div class="card-head">
+      <h2>Campaign</h2>
+      <div class="mode-toggle">
+        <button class="toggle on" data-mode="cpm">CPM + CTR</button>
+        <button class="toggle" data-mode="cpc">Direct CPC</button>
+      </div>
+    </div>
+    <div class="fields">
+      <label>Daily ad spend
+        <span class="ip"><i class="cur">$</i><input id="spend" type="number" step="1" value="200"></span>
+      </label>
+      <div data-modefield="cpm">
+        <label>CPM (cost per 1k impressions) <i class="info" tabindex="0" data-tip="What it is: what it costs to show your ad 1,000 times. | Where to get it: the ad platform's reporting (Meta/TikTok/Google). | Why it matters: with CTR it derives your CPC, so it sits at the base of every downstream cost. The Scaling scenarios inflate CPM as you spend more (auction gets pricier) — that is the CPM-creep model. | RULE: use a recent blended CPM; it varies by season and audience, so re-check before big budget moves.">?</i>
+          <span class="ip"><i class="cur">$</i><input id="cpm" type="number" step="0.01" value="14.00"></span>
+        </label>
+        <label>CTR (click-through rate) <i class="info" tabindex="0" data-tip="What it is: the percent of people who click your ad after seeing it. | Where to get it: ad platform reporting (link CTR is the honest one to use). | Why it matters: with CPM it sets your CPC — higher CTR means cheaper clicks and better everything downstream. | RULE: enter as a percent (1.8 = 1.8%). Use link CTR, not all-clicks CTR, or CPC will look unrealistically low.">?</i>
+          <span class="ip"><input id="ctr" type="number" step="0.01" value="2.2"><i class="suf">%</i></span>
+        </label>
+      </div>
+      <div data-modefield="cpc" hidden>
+        <label>CPC (cost per click) <i class="info" tabindex="0" data-tip="What it is: the price you pay per click, entered directly. | When to use: Direct-CPC mode — for paid search or any channel where you think in CPC, not CPM/CTR. | Why it matters: it replaces the CPM×CTR derivation; everything downstream (clicks, orders, CPO) builds on it. | RULE: switch the Campaign card toggle to Direct CPC to use this; otherwise the CPM + CTR pair drives CPC.">?</i>
+          <span class="ip"><i class="cur">$</i><input id="cpc" type="number" step="0.01" value="0.56"></span>
+        </label>
+      </div>
+      <label>CVR (store conversion rate) <i class="info" tabindex="0" data-tip="What it is: the percent of visitors who actually place an order. | Where to get it: orders ÷ sessions in your store analytics. | Why it matters: it is the highest-leverage number on the page — orders, CPO, CAC and profit all swing directly with it. The Sensitivity slider exists mostly to stress this. | RULE: enter as a percent (2.4 = 2.4%). Use the realistic blended CVR for paid traffic, which is usually lower than your sitewide CVR.">?</i>
+        <span class="ip"><input id="cvr" type="number" step="0.01" value="3.6"><i class="suf">%</i></span>
+      </label>
+      <label>AOV override (optional)
+        <span class="ip"><i class="cur">$</i><input id="aov" type="number" step="0.01" placeholder="uses price above"></span>
+      </label>
+      <label>Upsell / post-purchase AOV bump
+        <span class="ip"><i class="cur">$</i><input id="upsell" type="number" step="0.01" value="0"></span>
+      </label>
+      <label>New customers (% of orders) <i class="info" tabindex="0" data-tip="What it is: the share of orders that come from first-time customers (the rest are returning buyers). | Where to get it: new-customer orders ÷ total orders in your analytics. | Why it matters: ad spend really buys new customers, so this drives New-customer CAC and the new-vs-returning split. | RULE: enter as a percent (70 = 70%). 100 models pure prospecting; lower it as your repeat base grows.">?</i>
+        <span class="ip"><input id="newPct" type="number" step="1" value="70"><i class="suf">%</i></span>
+      </label>
+      <label>New visitors (% of clicks) <i class="info" tabindex="0" data-tip="What it is: the share of clicks/visits that are first-time visitors (the rest have been before). | Where to get it: new vs returning users in your web analytics for paid traffic. | Why it matters: it splits RPV into new vs returning so you can see how cold traffic monetises against warm. | RULE: enter as a percent (80 = 80%). Prospecting-heavy accounts run high; retargeting-heavy ones lower.">?</i>
+        <span class="ip"><input id="newVisPct" type="number" step="1" value="80"><i class="suf">%</i></span>
+      </label>
+      <label>Attribution capture (% of true conversions) <i class="info" tabindex="0" data-tip="What it is: the share of true conversions the ad platform actually attributes to itself, given your lookback window. | Why it matters: a short lookback (e.g. 1-day) under-reports; a long one over-reports. This drives the Platform-reported ROAS so dashboard numbers reconcile with reality. | RULE: 100 means the platform sees everything (rare). Drop toward 60–80 to model iOS/short-window under-reporting. The engine's true numbers do not change — only the reported ones.">?</i>
+        <span class="ip"><input id="attrCapture" type="number" step="1" value="100"><i class="suf">%</i></span>
+      </label>
+      <label>Other channels — daily spend (for MER) <i class="info" tabindex="0" data-tip="What it is: daily ad spend on every OTHER channel besides this campaign, for the blended MER. | Why it matters: MER ties to your real P&L only when all spend is counted. | RULE: this is a quick stub — the Channel mix card overrides it with a proper per-channel editor when you add channels there.">?</i>
+        <span class="ip"><i class="cur">$</i><input id="otherSpend" type="number" step="1" value="0"></span>
+      </label>
+      <label>Other channels — daily revenue (for MER) <i class="info" tabindex="0" data-tip="What it is: daily revenue attributed to all OTHER channels besides this campaign, for the blended MER. | Why it matters: MER = total revenue ÷ total spend; without other-channel revenue the blended number is wrong. | RULE: stub field — the Channel mix card computes this from each channel's spend × ROAS and overrides this value.">?</i>
+        <span class="ip"><i class="cur">$</i><input id="otherRevenue" type="number" step="1" value="0"></span>
+      </label>
+      <div class="campaign-save">
+        <input id="campaignName" type="text" placeholder="Name this campaign (e.g. Meta Jan)">
+        <button id="saveCampaignBtn" class="btn btn-primary btn-sm">Save campaign</button>
+        <select id="campaignSelect"><option value="">Saved campaigns…</option></select>
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-channel mix: blended MER across every channel -->
+  <section class="card" id="channelCard">
+    <div class="card-head">
+      <h2>Channel mix</h2>
+      <span class="muted">blended MER across all channels</span>
+    </div>
+    <div class="howto">
+      <p><b>What it does:</b> add the channels you run <i>besides</i> the
+      campaign above (Meta, Google, TikTok, Klaviyo…), each with its own daily
+      spend and ROAS. AdCalc blends them with this campaign into one true
+      <b>MER</b> — total revenue ÷ total spend across everything. Per-channel
+      ROAS lies when you run several at once; MER is what ties to your P&amp;L.</p>
+      <p><b>Try it:</b> click <b>+ Add channel</b> → name it “Google”, daily
+      spend <b>150</b>, ROAS <b>3</b>. Watch the <b>MER (blended)</b> tile in
+      Live results update. (This overrides the simple “Other channels” fields
+      in the Campaign panel.)</p>
+    </div>
+    <div class="chan-row chan-head" aria-hidden="true">
+      <span>Channel name</span><span>Daily spend</span><span>ROAS (rev ÷ spend)</span><span></span>
+    </div>
+    <div class="chan-rows" id="chanRows"></div>
+    <div class="chan-foot">
+      <button id="addChanBtn" class="btn btn-ghost btn-sm">+ Add channel</button>
+      <span class="chan-blend" id="chanBlend">Add channels to model a blended MER</span>
+    </div>
+  </section>
+
+  <!-- Multi-SKU blended: weighted-average economics across saved products -->
+  <section class="card" id="skuCard">
+    <div class="card-head">
+      <h2>Product mix (blended)</h2>
+      <span class="muted">weighted-average unit economics across saved products</span>
+    </div>
+    <div class="howto">
+      <p><b>What it does:</b> if you sell several products, run the whole
+      calculator on their weighted average instead of one product.</p>
+      <p><b>Steps:</b> 1) in the <b>Product</b> panel, enter a product and click
+      <b>Save product</b> (name it); repeat for each SKU. 2) Each saved product
+      appears below — give it a <b>weight</b> (e.g. its share of orders: 70,
+      30…). 3) Tick <b>Use blended product</b> — every metric now runs on the
+      blended economics. Untick to return to the single product.</p>
+    </div>
+    <div class="sku-rows" id="skuRows"></div>
+    <div class="sku-foot">
+      <label class="sku-toggle">
+        <input type="checkbox" id="skuOn"> Use blended product
+      </label>
+      <span id="skuNote">Save products, set weights, then enable blend</span>
+    </div>
+  </section>
+
+  <!-- Profit curve first: the chart is the answer, cards are the evidence -->
+  <section class="card" id="chartCard">
+    <div class="card-head">
+      <h2>Profit curve</h2>
+      <span class="muted">daily profit across the full spend range · breakeven, target &amp; current marked</span>
+    </div>
+    <div class="chart-wrap chart-hero"><svg id="curve" viewBox="0 0 800 320" preserveAspectRatio="none" role="img" aria-label="Daily profit versus daily ad spend"></svg><div id="curveTip" hidden></div></div>
+    <div class="chart-legend">
+      <span><i class="lg lg-profit"></i>Daily profit</span>
+      <span><i class="lg lg-zero"></i>Breakeven (zero)</span>
+      <span><i class="lg lg-target"></i>Target profit</span>
+      <span><i class="lg lg-now"></i>Current spend</span>
+    </div>
+  </section>
+
+  <!-- SCREEN 3 — live output -->
+  <section class="card output" id="outputCard">
+    <div class="card-head">
+      <h2>Live results</h2>
+      <div class="tabs" id="resultTabs" role="tablist">
+        <button class="tab on" data-tab="all">All</button>
+        <button class="tab" data-tab="Efficiency">Efficiency</button>
+        <button class="tab" data-tab="Profit benchmarks">Benchmarks</button>
+        <button class="tab" data-tab="Customer split">Customers</button>
+        <button class="tab" data-tab="Per-visitor">Per-visitor</button>
+        <button class="tab" data-tab="Reporting &amp; blended">Reporting</button>
+        <button class="tab" data-tab="Monthly projection">Monthly</button>
+      </div>
+    </div>
+
+    <!-- Hero health gauge: red (below breakeven) / amber (profitable, below
+         target) / green (at or above target), needle at current ROAS -->
+    <div class="gauge" id="gauge">
+      <div class="gauge-track">
+        <span class="gz gz-red"></span><span class="gz gz-amber"></span><span class="gz gz-green"></span>
+        <span class="gauge-needle" id="gaugeNeedle"></span>
+      </div>
+      <div class="gauge-foot">
+        <span id="gaugeVerdict" class="gauge-verdict">—</span>
+        <span class="muted" id="gaugeDetail"></span>
+      </div>
+    </div>
+
+    <!-- The two numbers that matter most -->
+    <div class="hero-metrics">
+      <div class="metric hero"><span class="m-label">Daily profit</span><span class="m-val" id="o_daily">—</span></div>
+      <div class="metric hero"><span class="m-label">Monthly net profit</span><span class="m-val" id="o_mnet">—</span></div>
+    </div>
+
+    <div class="msection" data-section="Efficiency"><h3 class="msection-h">Efficiency</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">CPC</span><span class="m-val" id="o_cpc">—</span></div>
+        <div class="metric"><span class="m-label">Daily clicks</span><span class="m-val" id="o_clicks">—</span></div>
+        <div class="metric"><span class="m-label">Orders / day</span><span class="m-val" id="o_orders">—</span></div>
+        <div class="metric"><span class="m-label">CPO <i class="info" tabindex="0" data-tip="What it is: cost per order — the all-in ad cost to generate one order, new or returning. | How it is computed: `CPO = Ad spend / Orders`. | Why it matters: this is the single number to compare against your margin. If CPO exceeds net margin per order, every order loses money. Northbeam 3.0 renamed CAC to CPO because the old CAC was functionally cost per order. | RULE: keep CPO below `Target CPO / max CAC` (see Profit benchmarks) and you hit your profit goal.">?</i></span><span class="m-val" id="o_cac">—</span></div>
+        <div class="metric"><span class="m-label">Gross profit / order</span><span class="m-val" id="o_gross">—</span></div>
+        <div class="metric"><span class="m-label">Net profit / order</span><span class="m-val" id="o_net">—</span></div>
+        <div class="metric"><span class="m-label">ROAS <i class="info" tabindex="0" data-tip="What it is: Return On Ad Spend — gross revenue generated per $1 of ad spend. | How it is computed: `ROAS = Daily revenue / Ad spend`. | Why it matters: it is the headline number every buyer quotes, but it ignores margin. A 3x ROAS is great at 70% margin and a disaster at 20%. Always read it next to Breakeven ROAS. | RULE: ROAS above Breakeven ROAS = profitable; below = losing money regardless of how high it looks.">?</i></span><span class="m-val" id="o_roas">—</span></div>
+      </div>
+    </div>
+
+    <div class="msection" data-section="Profit benchmarks"><h3 class="msection-h">Profit benchmarks</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">Breakeven ROAS <i class="info" tabindex="0" data-tip="What it is: the exact ROAS where profit is zero — your line in the sand. | How it is computed: `Revenue/order / Net margin`. | Why it matters: any reported ROAS below this is unprofitable even if it sounds high; anything above it makes money. This is the number to set ad-platform target ROAS against. | RULE: thinner margins push this number up — low-margin products need a far higher ROAS to survive.">?</i></span><span class="m-val" id="o_beroas">—</span><span class="m-note" id="beroasNote"></span></div>
+        <div class="metric"><span class="m-label">Breakeven CVR <i class="info" tabindex="0" data-tip="What it is: the store conversion rate at which you exactly break even, given this spend and CPC. | How it is computed: `Ad spend / (contribution × clicks)`, where contribution = Revenue/order − COGS − Shipping. | Why it matters: it tells you how good your store has to convert just to not lose money. The note beneath shows how much headroom (or shortfall) your typed CVR has versus it. | RULE: aim for a real CVR well above breakeven — the gap is your margin of safety.">?</i></span><span class="m-val" id="o_becvr">—</span><span class="m-note" id="becvrNote"></span></div>
+        <div class="metric"><span class="m-label">Target ROAS <i class="info" tabindex="0" data-tip="What it is: the ROAS you must hit to reach your Target net profit goal (not just break even). | How it is computed: `Revenue/order / Target CPO`, where Target CPO = Net margin − Revenue×Target%. With Target% = 0 it collapses to Breakeven ROAS. | Why it matters: this is the number to actually optimise campaigns toward — breakeven keeps the lights on, target grows the business. | RULE: set your ad platform's target ROAS here, not at breakeven.">?</i></span><span class="m-val" id="o_troas">—</span><span class="m-note" id="troasNote"></span></div>
+        <div class="metric"><span class="m-label">Target CPO / max CAC <i class="info" tabindex="0" data-tip="What it is: the most you can afford to pay per order and still hit your profit target. | How it is computed: `Net margin − (Revenue/order × Target net profit%)`. | Why it matters: it is a hard ceiling for bidding and budgets. If actual CPO is under this, you are hitting the goal; over it, you are eating into target profit. | RULE: hand this number to your media buyer as the max allowable cost per purchase.">?</i></span><span class="m-val" id="o_tcpo">—</span></div>
+        <div class="metric"><span class="m-label">Contribution margin / order <i class="info" tabindex="0" data-tip="What it is: what one order contributes after ALL variable costs (COGS, shipping, processing, refunds, fees) but BEFORE ad cost. | How it is computed: revenue/order minus every variable cost except CAC. | Why it matters: this is the pool ad spend draws from — net profit/order is exactly contribution margin minus CPO. | RULE: if CPO is approaching contribution margin, you are one CPM spike away from losing money.">?</i></span><span class="m-val" id="o_contrib">—</span></div>
+        <div class="metric"><span class="m-label">Breakeven AOV <i class="info" tabindex="0" data-tip="What it is: the minimum revenue per order that zeroes net profit at your current CPO, processing% and refund%. | How it is computed: the margin chain inverted so net profit/order = 0. | Why it matters: the third leg of breakeven (with ROAS and CVR) — a hard floor for pricing and bundling decisions. | RULE: your real revenue/order should sit comfortably above this; if it doesn't, raise price/AOV or cut acquisition cost.">?</i></span><span class="m-val" id="o_beaov">—</span></div>
+        <div class="metric"><span class="m-label">Marginal ROAS <i class="info" tabindex="0" data-tip="What it is: the ROAS on the NEXT dollar of spend at your current budget — not the blended average. | How it is computed: the extra revenue from a small spend increase ÷ that increase, with CPM creep applied. | Why it matters: blended ROAS hides the truth; the scale-or-not decision lives in marginal ROAS. | RULE: keep spending while marginal ROAS is above Breakeven ROAS; stop when it drops below.">?</i></span><span class="m-val" id="o_mroas">—</span><span class="m-note" id="mroasNote"></span></div>
+        <div class="metric"><span class="m-label">Scaling ceiling <i class="info" tabindex="0" data-tip="What it is: the daily spend where the next dollar's ROAS falls below breakeven — past here, scaling destroys money. | How it is computed: the spend at which marginal ROAS crosses below Breakeven ROAS, using the CPM-creep model. | Why it matters: this is the single number every operator wants and almost no free tool gives — your hard scale limit. | RULE: treat it as a do-not-exceed budget; to push it higher, improve margin, CVR or creative efficiency.">?</i></span><span class="m-val" id="o_sat">—</span></div>
+      </div>
+    </div>
+
+    <div class="msection" data-section="Customer split"><h3 class="msection-h">Customer split</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">New-customer CAC <i class="info" tabindex="0" data-tip="What it is: the true cost to acquire one NEW customer (returning buyers are not an acquisition cost). | How it is computed: `Ad spend / (Orders × New customers%)`. | Why it matters: ad budgets buy new customers; returning revenue is a bonus. New-customer CAC is always ≥ blended CPO and is the honest number to compare against LTV. | RULE: judge acquisition against LTV and CAC payback, not against first-order margin alone.">?</i></span><span class="m-val" id="o_ncac">—</span></div>
+        <div class="metric"><span class="m-label">New-customer ROAS <i class="info" tabindex="0" data-tip="What it is: first-order revenue from new customers per $1 of ad spend. | How it is computed: `(New orders × Revenue/order) / Ad spend`. | Why it matters: it isolates how the acquisition engine performs before any repeat purchases — the strictest read on whether ads pay back on day one. | RULE: if new-customer ROAS alone is unprofitable, you are betting entirely on retention; make sure the LTV math below supports that.">?</i></span><span class="m-val" id="o_nroas">—</span></div>
+        <div class="metric"><span class="m-label">Customer LTV <i class="info" tabindex="0" data-tip="What it is: the gross-margin value of a customer over time, not just their first order. | How it is computed: with a Monthly repeat-purchase rate set, a 12-month cohort: `Gross margin × Σ retention^k` for months k = 0..11. With no repeat rate, the simpler `Gross margin × orders per year`. | Why it matters: LTV is the budget you can spend to acquire someone. High LTV justifies a high CAC. | RULE: a healthy business keeps LTV comfortably above New-customer CAC (often 3x+).">?</i></span><span class="m-val" id="o_ltv">—</span><span class="m-note" id="ltvNote"></span></div>
+        <div class="metric"><span class="m-label">CAC payback <i class="info" tabindex="0" data-tip="What it is: how many months until a new customer's accumulated margin repays what you paid to acquire them. | How it is computed: the first month where cumulative per-customer margin (cohort model when a repeat rate is set) clears New-customer CAC. | Why it matters: it is the cash-flow number CFOs care about — long payback ties up cash and raises risk even if LTV is high. | RULE: under ~12 months is generally healthy for DTC; the tile turns amber/red as it stretches out.">?</i></span><span class="m-val" id="o_payback">—</span><span class="m-note" id="paybackNote"></span></div>
+      </div>
+    </div>
+
+    <div class="msection" data-section="Per-visitor"><h3 class="msection-h">Per-visitor</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">CPV <i class="info" tabindex="0" data-tip="What it is: cost per visitor — what one visit to your store costs you. | How it is computed: `Ad spend / clicks` (a click ≈ a visit in this forward model). | Why it matters: pairs with RPV below — if RPV exceeds CPV you make money per visit; if not, more traffic just loses money faster. | RULE: compare CPV directly against RPV (all); the gap is your per-visit profit.">?</i></span><span class="m-val" id="o_cpv">—</span></div>
+        <div class="metric"><span class="m-label">RPV — all <i class="info" tabindex="0" data-tip="What it is: revenue per visitor across everyone who lands on the store. | How it is computed: `Daily revenue / clicks`. | Why it matters: it is CVR and AOV combined into one money number — the cleanest single gauge of how well the store monetises traffic. | RULE: RPV (all) minus CPV is your margin of error per visit; the wider, the safer to scale.">?</i></span><span class="m-val" id="o_rpv">—</span></div>
+        <div class="metric"><span class="m-label">RPV — new <i class="info" tabindex="0" data-tip="What it is: revenue per NEW visitor only. | How it is computed: `(New orders × Revenue/order) / (clicks × New visitor%)`. | Why it matters: new visitors typically convert worse than returning ones; this isolates how cold traffic actually monetises, which is what paid acquisition mostly buys. | RULE: if RPV (new) is far below RPV (all), your economics lean heavily on returning visitors — protect retention.">?</i></span><span class="m-val" id="o_rpvn">—</span></div>
+        <div class="metric"><span class="m-label">RPV — returning <i class="info" tabindex="0" data-tip="What it is: revenue per RETURNING visitor. | How it is computed: `(Returning orders × Revenue/order) / (clicks × (1 − New visitor%))`. | Why it matters: returning visitors usually monetise far better; this quantifies how much your repeat audience is worth and why retention spend pays off. | RULE: a big gap over RPV (new) means email/SMS/retention is your highest-ROI lever.">?</i></span><span class="m-val" id="o_rpvr">—</span></div>
+      </div>
+    </div>
+
+    <div class="msection" data-section="Reporting &amp; blended"><h3 class="msection-h">Reporting &amp; blended</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">MER (blended) <i class="info" tabindex="0" data-tip="What it is: Marketing Efficiency Ratio — total revenue divided by total spend across every channel, not one campaign. | How it is computed: `(Daily revenue + Other revenue) / (Ad spend + Other spend)`. Fill the Channel mix card and this becomes a true all-channel blended number. | Why it matters: per-channel ROAS double-counts and lies when you run Meta + Google + TikTok at once; MER is the number that ties to your actual P&L. | RULE: trust MER over channel ROAS for whole-business decisions.">?</i></span><span class="m-val" id="o_mer">—</span></div>
+        <div class="metric"><span class="m-label">Platform-reported ROAS <i class="info" tabindex="0" data-tip="What it is: the rosier ROAS an ad platform would show you, versus the true ROAS. | How it is computed: `True ROAS × Attribution capture%`. Set Attribution capture below 100% to model a short lookback window under-reporting conversions. | Why it matters: Meta and Google attribute differently than reality; this lets you reconcile dashboard numbers with what actually hit the bank. | RULE: decide on true ROAS; use platform-reported only to sanity-check what the ad manager will display.">?</i></span><span class="m-val" id="o_rroas">—</span></div>
+      </div>
+    </div>
+
+    <div class="msection" data-section="Monthly projection"><h3 class="msection-h">Monthly projection</h3>
+      <div class="metrics">
+        <div class="metric"><span class="m-label">Monthly revenue</span><span class="m-val" id="o_mrev">—</span></div>
+        <div class="metric"><span class="m-label">Monthly ad spend</span><span class="m-val" id="o_mspend">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4 — scaling scenarios -->
+  <section class="card" id="scenarioCard">
+    <div class="card-head">
+      <h2>Scaling scenarios</h2>
+      <label class="cur-select">
+        <span>Top tier × <i class="info" tabindex="0" data-tip="What it is: the ceiling of the scaling range, as a multiple of your current daily spend. 10 means model up to 10× today's budget. | What it controls: the 6 tier cards below, the X-axis of the Profit curve, the far-right end of the Drag-to-model slider, and how far Goal-seek searches. | How the tiers are built: the low band is fixed at 0.25× / 0.5× / 1× (so your current spend is always shown and highlighted); the three higher tiers are spaced geometrically up to this multiple — e.g. at 10× you get roughly 2.15×, 4.64×, 10×. | What it does to the math: each tier re-runs the full engine at that spend AND inflates CPM with the creep model (auctions get pricier as you scale), so bigger tiers are deliberately not linear. | RULE: raise it to see where scaling breaks; it changes the VIEW range only, never your real inputs or the live results above.">?</i></span>
+        <input id="tierMax" type="number" min="1.5" step="0.5" value="10">
+      </label>
+    </div>
+    <p class="muted scen-note">Tiers auto-derive from your spend × the top multiple with CPM creep applied — a view, not a change to your inputs.</p>
+    <div class="tiers" id="tiers"></div>
+    <div class="probe">
+      <div class="probe-head">
+        <span>Drag to model any daily spend <i class="info" tabindex="0" data-tip="What it is: a live what-if. Drag from $0 (far left) up to the top tier (far right) and read the resulting daily profit, ROAS and the change versus your current spend — the same CPM-creep model the tier cards use. | Where it starts: the dot opens at YOUR current daily spend, not at zero, so the first number you see is your real scenario. | Why it matters: it answers what happens if I push budget up or pull it back without retyping anything. | RULE: if every position shows red, your unit economics lose money at any budget — fix margin, CPC or CVR first; scaling a loss only deepens it.">?</i></span>
+        <span class="probe-read" id="probeRead">—</span>
+      </div>
+      <input id="probeSlider" type="range" min="0" max="100" step="0.5" value="10">
+    </div>
+    <div class="solver">
+      <div class="solver-head">
+        <span>Goal-seek — cheapest spend to hit a target daily profit <i class="info" tabindex="0" data-tip="What it is: you name a target daily profit; it scans every budget (with CPM creep) and returns the SMALLEST daily spend that reaches it, plus the resulting ROAS. | How to use: type a target, press Solve spend. | Reading the result: a green answer is the budget to run. NOT REACHABLE is not a bug — it means your current economics can never produce that profit at any budget (it also shows the best profit possible and the spend that hits it). Lower the target or fix margin/CPC/CVR. | RULE: the peak it reports is your realistic ceiling at these inputs.">?</i></span>
+      </div>
+      <div class="solver-row">
+        <span class="ip"><i class="cur">$</i><input id="solverTarget" type="number" step="10" value="500"></span>
+        <button id="solverBtn" class="btn btn-primary btn-sm">Solve spend</button>
+        <span class="solver-out" id="solverOut">Type a target and press Solve spend</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sensitivity sliders -->
+  <section class="card" id="sliderCard">
+    <div class="card-head"><h2>Sensitivity</h2><span class="muted">stress-test without retyping</span></div>
+    <div class="sliders">
+      <label>CTR <i class="info" tabindex="0" data-tip="What it is: a live override for click-through rate that does not touch your typed inputs. | Why it matters: drag it to stress-test how fragile the plan is to CTR swings — every metric, the gauge and the curve update instantly. | RULE: Reset to inputs clears the override. The dragged state is saved, so a refresh keeps your what-if.">?</i> <output id="ctrOut">2.20%</output>
+        <input id="ctrSlider" type="range" min="0.5" max="5" step="0.05" value="2.2">
+      </label>
+      <label>CVR <i class="info" tabindex="0" data-tip="What it is: a live override for store conversion rate, independent of your typed CVR. | Why it matters: CVR is the highest-leverage variable — sliding it shows how quickly profit turns red or green, which is the fastest way to find your risk. | RULE: this overrides the typed CVR only while sliders are active; Reset to inputs restores it.">?</i> <output id="cvrOut">3.60%</output>
+        <input id="cvrSlider" type="range" min="0.5" max="8" step="0.05" value="3.6">
+      </label>
+      <label>CPM <i class="info" tabindex="0" data-tip="What it is: a live override for CPM, separate from your typed CPM. | Why it matters: model rising ad costs (seasonality, audience fatigue, Q4) without retyping and watch CPC, CPO and profit react. | RULE: pairs with the Scaling scenarios, which add their own CPM creep on top as spend grows.">?</i> <output id="cpmOut">$14.00</output>
+        <input id="cpmSlider" type="range" min="5" max="80" step="0.5" value="14">
+      </label>
+      <label>Spend <i class="info" tabindex="0" data-tip="What it is: a live multiplier on daily ad spend, separate from your typed spend. | Why it matters: stress-test budget changes in place — the gauge, profit curve and every metric react, with the same CPM-creep model the Scaling scenarios use. | RULE: 1.00× = your typed spend. Reset to inputs clears it; the dragged state is saved across refresh.">?</i> <output id="spendOut">1.00×</output>
+        <input id="spendSlider" type="range" min="0.1" max="4" step="0.05" value="1">
+      </label>
+      <p class="slider-ref muted" id="sliderRef"></p>
+      <button id="resetSliders" class="btn btn-tertiary btn-sm">Reset to inputs</button>
+    </div>
+  </section>
+
+  <!-- Monitoring: alert rules + logged history trend -->
+  <section class="card" id="monitorCard">
+    <div class="card-head">
+      <h2>Monitoring</h2>
+      <span class="muted">in-browser rules &amp; logged history</span>
+    </div>
+    <div class="mon-grid">
+      <div class="mon-rules">
+        <h3 class="msection-h">Alert me when…</h3>
+        <label>Daily profit below <i class="info" tabindex="0" data-tip="What it is: a personal alert rule — warn when projected daily profit drops under this amount. | Why it matters: turns the calculator into a guardrail; a red banner appears at the top the moment the live scenario breaches it. | RULE: leave blank to switch the rule off. Everything is in-browser — no emails, no server.">?</i>
+          <span class="ip"><i class="cur">$</i><input id="alertProfitMin" type="number" step="10" placeholder="no alert"></span>
+        </label>
+        <label>ROAS below <i class="info" tabindex="0" data-tip="What it is: alert when true ROAS falls under this multiple. | Why it matters: a fast tripwire for campaign decay — set it near your Breakeven or Target ROAS to get warned before you bleed. | RULE: blank = off. Compares against true ROAS, not platform-reported.">?</i>
+          <span class="ip"><input id="alertRoasMin" type="number" step="0.05" placeholder="no alert"><i class="suf">x</i></span>
+        </label>
+        <label>CPO above <i class="info" tabindex="0" data-tip="What it is: alert when cost per order rises above this ceiling. | Why it matters: CPO creeping past your max allowable is the earliest sign acquisition is breaking; set this to your Target CPO / max CAC for a hard guardrail. | RULE: blank = off. Pair it with the ROAS and profit rules for a full safety net.">?</i>
+          <span class="ip"><i class="cur">$</i><input id="alertCpoMax" type="number" step="1" placeholder="no alert"></span>
+        </label>
+      </div>
+      <div class="mon-hist">
+        <div class="mon-hist-head">
+          <h3 class="msection-h">Profit history</h3>
+          <div>
+            <button id="logBtn" class="btn btn-primary btn-sm">Log today</button>
+            <button id="clearHistBtn" class="btn btn-ghost btn-sm">Clear</button>
+          </div>
+        </div>
+        <div class="trend-wrap"><svg id="trend" viewBox="0 0 800 220" preserveAspectRatio="none" role="img" aria-label="Logged daily profit over time"></svg></div>
+        <p class="muted" id="histNote">No snapshots yet — log today to start the trend.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Save / export -->
+  <section class="card" id="scenarioSaveCard">
+    <div class="card-head">
+      <h2>Sessions</h2>
+      <button id="methodBtn" class="btn btn-tertiary btn-sm">How we calculate</button>
+    </div>
+    <div class="session-bar">
+      <input id="scenarioName" type="text" placeholder="Name this scenario">
+      <input id="scenarioNote" type="text" placeholder="Note (e.g. tested new creative Mar 12)">
+      <button id="saveScenarioBtn" class="btn btn-primary btn-sm">Save scenario</button>
+      <button id="shareBtn" class="btn btn-ghost btn-sm">Copy share link</button>
+      <select id="scenarioSelect"><option value="">Recall…</option></select>
+      <details class="more">
+        <summary class="btn btn-ghost btn-sm">More</summary>
+        <div class="more-menu">
+          <button id="exportJsonBtn" class="btn btn-tertiary btn-sm">Export JSON</button>
+          <button id="exportCsvBtn" class="btn btn-tertiary btn-sm">Export CSV</button>
+          <button id="printBtn" class="btn btn-tertiary btn-sm">Print / PDF</button>
+          <button id="resetBtn" class="btn btn-tertiary btn-sm danger">Reset everything</button>
+        </div>
+      </details>
+    </div>
+    <p id="shareMsg" class="share-msg" hidden></p>
+  </section>
+
+</main>
+
+<!-- Print-only financial statement, generated from compute() at print time -->
+<div id="printDoc" aria-hidden="true"></div>
+
+<div class="modal" id="methodModal" hidden>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-label="Methodology">
+    <button class="modal-x" id="methodX" aria-label="Close">×</button>
+    <h3>How AdCalc calculates</h3>
+    <p class="muted">Every figure is forward-modelled in your browser from the inputs. No data leaves the device. Nothing is rounded inside the engine — display rounding only.</p>
+    <pre class="method-pre">CPC            = (CPM/1000) × (1/CTR)   · or direct CPC
+Orders/day     = (Ad spend / CPC) × CVR
+Gross margin   = Rev/order − COGS − Shipping − Rev×Processing%
+Net margin     = Gross − Gross×Refund% − Other fees
+CPO / CAC      = Ad spend / Orders/day
+Daily profit   = (Net margin − CPO) × Orders/day
+ROAS           = Daily revenue / Ad spend
+Breakeven ROAS = Rev/order / Net margin
+Target ROAS    = Rev/order / (Net margin − Rev×Target%)
+New-cust CAC   = Ad spend / (Orders × New customer%)
+MER            = (Rev + Other rev) / (Spend + Other spend)
+Reported ROAS  = ROAS × Attribution capture%
+RPV (all)      = Daily revenue / clicks
+12-mo LTV      = Gross margin × Σ retention^k  (k=0..11)
+CAC payback    = first month cumulative margin ≥ New-cust CAC
+CPM creep      = CPM × (1 + 0.06 × log2(spend ratio))   when scaling up</pre>
+    <p class="muted">Scaling scenarios and the profit curve apply the CPM-creep model so larger spend shows realistic auction inflation, not linear extrapolation.</p>
+  </div>
+</div>
+
+<div class="stickybar" id="stickybar">
+  <div class="sb-live"><span class="sb-dot"></span>LIVE</div>
+  <div class="sb-item"><span class="sb-label">Daily profit</span><span class="sb-val" id="sb_daily">—</span></div>
+  <div class="sb-item"><span class="sb-label">ROAS</span><span class="sb-val" id="sb_roas">—</span></div>
+  <div class="sb-item"><span class="sb-label">Monthly net</span><span class="sb-val" id="sb_mnet">—</span></div>
+</div>
+
+<footer class="foot">
+  <span>
+    AdCalc by <a href="https://artivicolab.com" target="_blank" rel="noopener">Artivicolab</a>
+    · No OAuth. No upload. No server.
+    · Found an error or a missing feature?
+    <a id="contactMail" rel="nofollow">Contact us</a>
+    · Made with love.
+  </span>
+</footer>
+<script>(function(){var a=document.getElementById('contactMail');if(!a)return;var u='artivicolab',d='gmail.com';a.href='mailto:'+u+'@'+d+'?subject='+encodeURIComponent('AdCalc — error / feature report');})();</script>
+
+
+<script type="module" src="js/theme.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

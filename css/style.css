@@ -468,6 +468,28 @@ label{display:block;font-size:13px;font-weight:600;color:var(--ink)}
   color:var(--on-bg-strong)}
 .cta-band p{color:var(--on-bg);margin-bottom:28px}
 
+/* Legal / privacy document — a readable card panel, themed */
+.legal{max-width:780px;margin:32px auto;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:clamp(22px,4vw,42px);color:var(--ink)}
+.legal h1{font-family:var(--display);font-size:clamp(24px,3.5vw,32px);
+  font-weight:800;letter-spacing:-.02em;margin:0 0 6px;color:var(--ink)}
+.legal .legal-lead{font-size:15px;color:var(--muted);line-height:1.6;
+  margin:0 0 6px}
+.legal h2{font-family:var(--display);font-size:17px;font-weight:700;
+  letter-spacing:-.01em;margin:26px 0 8px;color:var(--ink)}
+.legal p{font-size:14.5px;line-height:1.7;margin:0 0 13px;color:var(--ink)}
+.legal ul{margin:0 0 14px;padding-left:20px;display:grid;gap:8px}
+.legal li{font-size:14px;line-height:1.6;color:var(--ink)}
+.legal a{color:var(--accent);text-decoration:underline;
+  text-underline-offset:2px;font-weight:600}
+.legal code{font-family:var(--mono);font-size:12.5px;
+  background:color-mix(in srgb,var(--ink) 8%,transparent);
+  padding:1px 5px;border-radius:4px}
+.legal .muted{color:var(--muted)}
+.legal .legal-meta{font-size:12px;margin:24px 0 0;padding-top:14px;
+  border-top:1px solid var(--line)}
+
 /* 404 */
 .notfound{text-align:center;padding:72px 0 88px;max-width:620px;margin:0 auto}
 .notfound .pill{display:inline-block;font-size:12px;font-weight:600;
