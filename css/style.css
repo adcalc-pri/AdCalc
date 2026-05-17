@@ -399,9 +399,15 @@ label{display:block;font-size:13px;font-weight:600;color:var(--ink)}
   .lp-nav-cta::before,.btn-lg::before{display:none}}
 
 .hero{text-align:center;padding:84px 0 64px}
-.hero .pill{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.03em;
-  color:var(--green);background:var(--green-bg);padding:6px 14px;border-radius:999px;
-  margin-bottom:22px}
+/* High-contrast (WCAG AA): ink text on the green chip, green dot keeps the
+   "free / good" cue. --green on --green-bg was only ~3:1 for 12px text. */
+.hero .pill{display:inline-flex;align-items:center;gap:7px;font-size:12px;
+  font-weight:700;letter-spacing:.03em;color:var(--ink);
+  background:var(--green-bg);
+  border:1px solid color-mix(in srgb,var(--green) 35%,transparent);
+  padding:6px 14px;border-radius:999px;margin-bottom:22px}
+.hero .pill::before{content:"";width:7px;height:7px;border-radius:50%;
+  background:var(--green);flex:0 0 auto}
 .hero h1{font-family:var(--display);font-size:clamp(34px,5.5vw,56px);
   font-weight:700;letter-spacing:-.015em;line-height:1.1;max-width:780px;
   margin:0 auto;color:var(--on-bg-strong)}
