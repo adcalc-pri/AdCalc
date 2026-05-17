@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy &amp; Data — AdCalc</title>
+<meta name="description" content="What AdCalc collects: nothing from your calculator. Optional anonymous analytics only after you explicitly opt in.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://adcalc.artivicolab.com/privacy">
+<link rel="stylesheet" href="css/style.css">
+<script>try{var t=localStorage.getItem('adcalc_theme');if(t&&t!=='classic')document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <a class="logo" href="home.html">AdCalc</a>
+    <span class="tag">Privacy &amp; data</span>
+  </div>
+</header>
+
+<main class="grid">
+  <section class="card" style="grid-column:1/-1;max-width:760px;margin:0 auto">
+    <div class="card-head"><h2>Privacy &amp; what we collect</h2></div>
+
+    <p><strong>Your calculator data never leaves your browser.</strong> Every
+    number you type — prices, costs, ad spend, campaigns, saved scenarios — is
+    computed locally in JavaScript and stored only on your own device in
+    <code>localStorage</code> and IndexedDB. It is never transmitted, uploaded,
+    or seen by us or any third party. There is no account, no login, and no
+    server that receives your inputs.</p>
+
+    <h3>Optional anonymous analytics</h3>
+    <p>We would like to know which pages are used so we can improve the tool.
+    For that we use Google Analytics 4, but only if you explicitly click
+    <em>“Allow analytics”</em> in the consent banner. Specifically:</p>
+    <ul>
+      <li>The Google tag (<code>gtag.js</code>) is <strong>not loaded at all</strong>
+      until you opt in. Before consent, nothing — not even a cookieless ping —
+      is sent to Google.</li>
+      <li>If you opt in, we collect only anonymous pageviews with IP
+      anonymization enabled. No personal data, no advertising or cross-site
+      tracking, and <strong>none of your calculator inputs</strong> are ever
+      sent (there are no custom analytics events anywhere in the app).</li>
+      <li>Ad storage, ad personalization, and ad user-data signals remain
+      <em>denied</em> at all times (Google Consent Mode v2).</li>
+      <li>If your browser sends a Do-Not-Track or Global Privacy Control
+      signal, analytics stays off and the banner is suppressed.</li>
+    </ul>
+
+    <h3>Your choice is recorded and reversible</h3>
+    <p>When you accept or decline, we store your choice, a timestamp, and the
+    policy version locally so we do not ask again unnecessarily. You can change
+    your mind at any time:</p>
+    <p><button id="withdrawBtn" class="btn btn-primary btn-sm">Reset my analytics choice</button>
+    <span id="withdrawMsg" class="muted"></span></p>
+    <p class="muted">This clears the stored choice and stops analytics on the
+    next page load. You can also clear all locally stored data from your
+    browser settings at any time.</p>
+
+    <h3>Subscription</h3>
+    <p>If you purchase AdCalc Pro, payment is handled by our payment processor
+    (Lemon Squeezy) under their own privacy policy. AdCalc only stores the
+    resulting licence token locally in your browser to unlock features.</p>
+
+    <h3>Your rights (EEA/UK GDPR)</h3>
+    <p>Because we do not collect or store personal data on any server, there is
+    no personal dataset to access, rectify, or erase on our side — your data
+    lives only on your device and is under your control. For the optional
+    analytics or any question, the data controller is
+    <strong>Artivicolab</strong>. Contact:
+    <a href="mailto:privacy@artivicolab.com">privacy@artivicolab.com</a>.</p>
+
+    <p class="muted">Last updated: 2026-05-16 · Policy version 1</p>
+    <p><a href="home.html">← Back to AdCalc</a></p>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Your numbers never leave your browser. No OAuth. No upload. No server.</span>
+</footer>
+
+<script>
+(function () {
+  var btn = document.getElementById('withdrawBtn');
+  var msg = document.getElementById('withdrawMsg');
+  btn.addEventListener('click', function () {
+    try {
+      localStorage.removeItem('adcalc_consent');
+      localStorage.removeItem('adcalc_consent_at');
+      localStorage.removeItem('adcalc_consent_v');
+      msg.textContent = ' Cleared. Analytics will be off and you will be asked again on next visit.';
+    } catch (e) {
+      msg.textContent = ' Could not access storage in this browser.';
+    }
+  });
+})();
+</script>
+</body>
+</html>
