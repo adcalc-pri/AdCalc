@@ -118,7 +118,7 @@ gtag('js',new Date());gtag('config','G-ETCBJWFTDX',{anonymize_ip:true});
 var c=document.getElementById('contactMail');
 if(c)c.href='mailto:'+m+'?subject='+encodeURIComponent('AdCalc — error / feature report');
 var p=document.getElementById('privacyMail');
-if(p){p.href='mailto:'+m+'?subject='+encodeURIComponent('AdCalc — privacy enquiry');p.textContent=m;}
+if(p)p.href='mailto:'+m+'?subject='+encodeURIComponent('AdCalc — privacy enquiry');
 var btn=document.getElementById('withdrawBtn'),msg=document.getElementById('withdrawMsg');
 if(btn)btn.addEventListener('click',function(){try{localStorage.removeItem('adcalc_consent');
 localStorage.removeItem('adcalc_consent_at');localStorage.removeItem('adcalc_consent_v');
