@@ -129,9 +129,11 @@ main,.foot{position:relative;z-index:1}
   padding:14px 24px;background:var(--card);border-bottom:1px solid var(--line);
   position:sticky;top:0;z-index:20;box-shadow:var(--shadow)}
 .brand{display:flex;align-items:center;gap:12px}
-.logo{font-family:var(--display);font-size:24px;font-weight:700;
+.logo{display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--display);font-size:24px;font-weight:700;
   letter-spacing:-.01em;color:var(--accent);text-decoration:none;
   cursor:pointer;transition:opacity .12s}
+.logo img{width:26px;height:26px;display:block;border-radius:6px;flex:0 0 auto}
 a.logo:hover{opacity:.7}
 .tag{font-size:13px;color:var(--muted)}
 @media(max-width:600px){.tag{display:none}}
