@@ -158,6 +158,12 @@ migration.)
   way — it must run by opening `index.html` (served, for module CORS).
 - UI stays clean and paid-grade. No clutter; this is a tool people pay for.
 - No emojis in code or content. Minimal comments; prose belongs in `.md`.
+- NEVER expose the contact email (`artivicolab@gmail.com`) in static markup.
+  It must always be assembled in JS at runtime from split parts
+  (`'artivicolab' + '@' + 'gmail.com'`), set only as a `mailto:` href, and the
+  visible link text stays generic ("Contact us" / "email us") — never render
+  the address as text. No plain `mailto:` or address string anywhere in HTML
+  (anti-scrape). Applies to every page (footers, privacy).
 - Verify both currency formatting and both input modes after any math change.
 - The profit-curve chart and health gauge are hand-rolled SVG/CSS in
   `app.js#renderCurve`/`renderGauge` — no chart library, ever. Reference colors
