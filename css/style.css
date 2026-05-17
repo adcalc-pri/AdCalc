@@ -357,6 +357,17 @@ label{display:block;font-size:13px;font-weight:600;color:var(--ink)}
 /* Footer sits on --bg, so it uses --on-bg (legible on every field, incl.
    Pop/Riso's saturated backgrounds). Links read via weight + underline
    rather than a hue that may not contrast with the field. */
+/* Consent opt-in banner (theme-aware, above the sticky bar) */
+.consent{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);
+  z-index:90;width:min(560px,calc(100vw - 24px));
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:var(--card);color:var(--ink);border:1px solid var(--line);
+  border-radius:12px;box-shadow:var(--shadow-lg);padding:14px 18px}
+.consent p{font-size:12.5px;line-height:1.5;margin:0;flex:1 1 240px;
+  color:var(--muted)}
+.consent-btns{display:flex;gap:8px;flex:0 0 auto}
+@media print{.consent{display:none!important}}
+
 .foot{text-align:center;padding:26px;font-size:13px;color:var(--on-bg);
   line-height:1.9}
 .foot a{color:var(--on-bg);text-decoration:underline;
